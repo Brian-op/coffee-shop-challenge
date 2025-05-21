@@ -1,6 +1,7 @@
+from order import Order
 class Customer :
     def __init__(self, name):
-        self._customer_name = name
+        self.name = name
 
     @property
     def name (self):
@@ -8,9 +9,19 @@ class Customer :
     
     @name.setter
     def name (self, name):
-        if len(name) > 15: 
-         raise TypeError("Characters should not exceed 15")
-        elif not isinstance (name, str):
-           raise TypeError("Name must be a string")
-        else  :
-           return self._name 
+        if not isinstance(name, str):
+            raise TypeError("Name must be a string")
+        
+        if not (1 <= len(name) <= 15):
+            raise ValueError("Name must be between 1 and 15 characters")
+        
+        self._name = name
+        
+    def orders(self):
+       return[order for order in Order.all if order.customer == self]
+    
+    def coffees(self):
+       return list(set(order.coffee for order in self.orders()))
+    
+    def new_order(self, coffee, price):
+       return Order (self,coffee, price)
