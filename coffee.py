@@ -9,25 +9,24 @@ class Coffee:
        return self._name
     
     @name.setter
-    def name (self, name):
-       
-       if len(name) < 3 :
-           raise TypeError("Name must be more than 3 characteres long")
-       
-       self._name = name
+    def name(self, name):
+        if hasattr(self, "_name"):
+            raise AttributeError("You cannot change coffee name if already set")
+        
+        if not isinstance(name, str):
+            raise TypeError("Coffee name must be a string")
+        
+        if len(name) < 3:
+            raise ValueError("Name must be at least 3 characters long")
+        
+        self._name = name
 
-       if not isinstance (name, str):
-           raise TypeError("Coffee name must be a string")
-       
-       if hasattr(self,"_name"):
-           raise ValueError("You cannot change coffee name if already set")
-         
        
     def orders(self):
        return[order for order in Order.all if order.coffee == self]
     
     def customers(self):
-       return list(set(order.customers for order in self.orders()))
+       return list(set(order.customer for order in self.orders()))
 
 
     def order_numbers(self):
